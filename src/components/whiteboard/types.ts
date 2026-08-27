@@ -22,10 +22,10 @@ export type AwsComponent = {
 };
 
 export type AwsNodeData = {
-    label: string;
-    type: AwsComponentType;
-    category: AwsComponentCategory;
-    icon: string;
-}
+  label: string;
+  type: AwsComponentType;
+  category: AwsComponentCategory;
+  icon: string;
+};
 
 export type AwsNode = Node<AwsNodeData, "aws">;

@@ -8,12 +8,10 @@ import {
   useReactFlow,
   Controls,
   MiniMap,
+  MarkerType,
 } from "@xyflow/react";
 
-import type {
-  Node,
-  Connection,
-} from "@xyflow/react";
+import type { Node, Connection } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
 
@@ -31,54 +29,31 @@ const nodeTypes = {
 };
 
 export function WhiteboardCanvas() {
-  const nodes = useWhiteboardStore(
-    (state) => state.nodes
-  );
+  const nodes = useWhiteboardStore((state) => state.nodes);
 
-  const edges = useWhiteboardStore(
-    (state) => state.edges
-  );
+  const edges = useWhiteboardStore((state) => state.edges);
 
-  const onNodesChange = useWhiteboardStore(
-    (state) => state.onNodesChange
-  );
+  const onNodesChange = useWhiteboardStore((state) => state.onNodesChange);
 
-  const onEdgesChange = useWhiteboardStore(
-    (state) => state.onEdgesChange
-  );
+  const onEdgesChange = useWhiteboardStore((state) => state.onEdgesChange);
 
-  const addNodeToStore = useWhiteboardStore(
-    (state) => state.addNode
-  );
+  const addNodeToStore = useWhiteboardStore((state) => state.addNode);
 
-  const updateNode = useWhiteboardStore(
-    (state) => state.updateNode
-  );
+  const updateNode = useWhiteboardStore((state) => state.updateNode);
 
-  const deleteNode = useWhiteboardStore(
-    (state) => state.deleteNode
-  );
+  const deleteNode = useWhiteboardStore((state) => state.deleteNode);
 
-  const addEdgeToStore = useWhiteboardStore(
-    (state) => state.addEdge
-  );
+  const addEdgeToStore = useWhiteboardStore((state) => state.addEdge);
 
-  const [selectedNode, setSelectedNode] =
-    useState<Node | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
 
   const { screenToFlowPosition } = useReactFlow();
 
-  const onNodeClick = (
-    _event: React.MouseEvent,
-    node: Node
-  ) => {
+  const onNodeClick = (_event: React.MouseEvent, node: Node) => {
     setSelectedNode(node);
   };
 
-  const onUpdateNode = (
-    nodeId: string,
-    data: Record<string, unknown>
-  ) => {
+  const onUpdateNode = (nodeId: string, data: Record<string, unknown>) => {
     updateNode(nodeId, data);
 
     setSelectedNode((currentNode) =>
@@ -87,7 +62,7 @@ export function WhiteboardCanvas() {
             ...currentNode,
             data,
           }
-        : currentNode
+        : currentNode,
     );
   };
 
@@ -101,39 +76,35 @@ export function WhiteboardCanvas() {
   };
 
   const onConnect = (connection: Connection) => {
-    addEdgeToStore(connection);
+    addEdgeToStore({
+      ...connection,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    });
   };
 
-  const onDragOver = (
-    event: React.DragEvent
-  ) => {
+  const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
 
     event.dataTransfer.dropEffect = "move";
   };
 
-  const onDrop = (
-    event: React.DragEvent
-  ) => {
+  const onDrop = (event: React.DragEvent) => {
     event.preventDefault();
 
-    const data =
-      event.dataTransfer.getData(
-        "application/reactflow"
-      );
+    const data = event.dataTransfer.getData("application/reactflow");
 
     if (!data) {
       return;
     }
 
-    const component: AwsComponent =
-      JSON.parse(data);
+    const component: AwsComponent = JSON.parse(data);
 
-    const position =
-      screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
 
     const newNode = {
       id: `node-${nodes.length + 1}`,
@@ -150,11 +121,9 @@ export function WhiteboardCanvas() {
     addNodeToStore(newNode);
   };
 
-  const addNode = (
-    component: AwsComponent
-  ) => {
+  const addNode = (component: AwsComponent) => {
     const newNode = {
-      id: `node-${nodes.length + 1}`,
+      id: `node-${crypto.randomUUID()}`,
       type: "aws",
       position: {
         x: 200,
@@ -179,14 +148,12 @@ export function WhiteboardCanvas() {
         display: "flex",
       }}
     >
-      <NodePalette
-        onAddNode={addNode}
-      />
+      <NodePalette onAddNode={addNode} />
 
       <div
         style={{
           flex: 1,
-          position: "relative"
+          position: "relative",
         }}
       >
         <WhiteBoardToolbar />
@@ -202,10 +169,7 @@ export function WhiteboardCanvas() {
           onDrop={onDrop}
           onNodeClick={onNodeClick}
           onPaneClick={onPaneClick}
-          deleteKeyCode={[
-            "Backspace",
-            "Delete",
-          ]}
+          deleteKeyCode={["Backspace", "Delete"]}
         >
           <Controls />
           <MiniMap />
