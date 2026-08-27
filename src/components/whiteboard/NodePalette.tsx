@@ -38,13 +38,7 @@ export default function NodePalette({ onAddNode }: NodePaletteProps) {
         }}
       />
 
-      {search && (
-        <button
-          onClick={() => setSearch("")}
-        >
-          Clear
-        </button>
-      )}
+      {search && <button onClick={() => setSearch("")}>Clear</button>}
 
       {filteredComponents.length === 0 ? (
         <p>No services found</p>
