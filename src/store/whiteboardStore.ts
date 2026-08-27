@@ -37,7 +37,6 @@ export const useWhiteboardStore = create<WhiteboardState>((set) => ({
         label: "API Gateway",
         type: "apiGateway",
         category: "compute",
-        icon: "",
       },
       type: "aws",
     },

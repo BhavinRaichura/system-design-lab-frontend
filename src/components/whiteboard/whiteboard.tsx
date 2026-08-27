@@ -114,7 +114,6 @@ export function WhiteboardCanvas() {
         label: component.label,
         type: component.type,
         category: component.category,
-        icon: component.icon,
       },
     };
 
@@ -133,7 +132,6 @@ export function WhiteboardCanvas() {
         label: component.label,
         type: component.type,
         category: component.category,
-        icon: component.icon,
       },
     };
 
